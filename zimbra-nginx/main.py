@@ -1,6 +1,7 @@
 import pandas as pdp
 import numpy as np
 import matplotlib.pyplot as plt
+import datetime
 
 # plt.figure();
 
@@ -21,11 +22,16 @@ def makeDataFramefromFile(file):
   return df
 
 def caculateMeanAndSTD(data):
+  # Tinh gia tri trung binh cua du lieu
   mean = data.mean()
+  # Tinh do lech chuan cua du lieu
   std = data.std()
   return mean, std
 
-def CountConnectionPerUser(data):
+def convertUnixTimetoHumanTime(unixTime):
+  return datetime.datetime.utcfromtimestamp(unixTime).strftime('%Y-%m-%d %H:%M:%S')
+
+def countConnectionPerUser(data):
   df1 = data[['LogType', 'LoggedUser', 'Timestamp']].copy()
   # Chia khoang thoi gian 1h
   df1['Timestamp'] = df1['Timestamp'].apply(lambda x: x / 3600)
@@ -44,11 +50,31 @@ def CountConnectionPerUser(data):
   df4['StatusConnectCount'] = df4['ConnectCount'].apply(lambda x: 1 if x >= noiseLimit else 0)
   print df4
 
-def CountConnectionPerIP(data):
+def countConnectionPerHour(data):
+  df1 = data[['Timestamp']].copy();
+  # Convert Unix timestamp sang human readable timestamp
+  df1['Timestamp'] = df1['Timestamp'].apply(lambda x: convertUnixTimetoHumanTime(x))
+  # Chuyen kieu du lieu cua field Timestamp tu string sang dang datetime
+  df1['Timestamp'] = pdp.to_datetime(df1['Timestamp']);
+  # Trich xuat gio trong chuoi datetime
+  df1['Hour'] = df1['Timestamp'].dt.hour;
+  # Tao DataFrame moi voi cot hour
+  df2 = df1[['Hour']].copy();
+  # Tinh tan suat xuat hien cac gia tri trong cot hour
+  df3 = df2.Hour.value_counts().sort_index(ascending=True).reset_index(name="Count").rename(columns={'index': 'Hour'});
+  # Chon cot hour lam index cho DataFrame
+  df4 = df3.set_index(['Hour']);
+  # Ve cac do thi lien quan
+  df4.plot(kind='bar', title="Tong so luot truy cap theo gio");
+  # Hien thi graph khi dung CMD
+  plt.show();
+
+def countConnectionPerIP(data):
   df1 = data[['ClientIP', 'LoggedUser', 'Timestamp', 'SessionID']]
-  df1['Timestamp'] = df1['Timestamp'].apply(lambda x: x / 86400)
+  df1['Timestamp'] = df1['Timestamp'].apply(lambda x: x / 3600)
   df2 = df1.groupby(['Timestamp', 'LoggedUser', 'ClientIP']).size().reset_index(name="ConnectCount")
 
 df = makeDataFramefromFile('log.csv')
-CountConnectionPerUser(df)
+# countConnectionPerUser(df)
+countConnectionPerHour(df)
 
