@@ -2,6 +2,9 @@ import pandas as pdp
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime
+# import matplotlib.style as style
+
+# style.use('fivethirtyeight')
 
 # plt.figure();
 
@@ -56,16 +59,17 @@ def countConnectionPerHour(data):
   df1['Timestamp'] = df1['Timestamp'].apply(lambda x: convertUnixTimetoHumanTime(x))
   # Chuyen kieu du lieu cua field Timestamp tu string sang dang datetime
   df1['Timestamp'] = pdp.to_datetime(df1['Timestamp']);
-  # Trich xuat gio trong chuoi datetime
+  # Trich xuat ngay gio trong chuoi datetime
   df1['Hour'] = df1['Timestamp'].dt.hour;
-  # Tao DataFrame moi voi cot hour
-  df2 = df1[['Hour']].copy();
-  # Tinh tan suat xuat hien cac gia tri trong cot hour
-  df3 = df2.Hour.value_counts().sort_index(ascending=True).reset_index(name="Count").rename(columns={'index': 'Hour'});
-  # Chon cot hour lam index cho DataFrame
-  df4 = df3.set_index(['Hour']);
+  df1['Day'] = df1['Timestamp'].dt.day;
+  # Tao DataFrame moi voi cot Hour va Day
+  df2 = df1[['Day', 'Hour']]
+  # Tinh tan suat xuat hien cac gia tri trong tung gio ung voi tung ngay
+  df3 = df2.groupby(['Day', 'Hour']).size().reset_index(name="Count");
+  # Tao Paviot table
+  df3 = pdp.pivot_table(df3, index='Hour', columns='Day', values='Count');
   # Ve cac do thi lien quan
-  df4.plot(kind='bar', title="Tong so luot truy cap theo gio");
+  df3.plot.bar()
   # Hien thi graph khi dung CMD
   plt.show();
 
