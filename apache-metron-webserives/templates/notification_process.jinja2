@@ -1,0 +1,11 @@
+{% extends "base.jinja2" %} {% block content %}
+<div class="container">
+  <div class="goback">
+    <a href="/metronapi" class="badge badge-primary">Go back</a>
+  </div>
+  <h1>Processing Result</h1>
+  {% if result == 200 or result == 201 %}
+  <h3>Sucessfully!. Your {{ type_config }} config has been {{method}}</h3>
+  {% else %}
+  <h3>Fail. Please help to check and try again!</h3>
+  {% endif %} {% endblock %}

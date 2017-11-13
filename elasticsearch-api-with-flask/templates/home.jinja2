@@ -1,0 +1,19 @@
+{% extends "base.jinja2" %}
+{% block content %}
+  <h1>SIMN Elasticsearch API</h1>
+  <p>Enter Source IP and Timestamp to query data from Elasticsearch</p>
+  <div class="form-input col-lg-4">
+    <form action="{{ url_for('query') }}" method=get>
+      <div class="form-group">
+        <label for="src_ip_addr">Source IP</label>
+        <input type="text" class="form-control" id="src_ip_addr" name="src_ip_addr" placeholder="Source IP" required
+        pattern="((^|\.)((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]?\d))){4}$">
+      </div>
+      <div class="form-group">
+          <label for="timestamp">Timestamp</label>
+          <input type="number" class="form-control" id="timestamp" name="timestamp" placeholder="Timestamp" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+  </div>
+{% endblock %}

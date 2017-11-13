@@ -1,0 +1,11 @@
+.form-input {
+  padding-left: 0 !important
+}
+
+.text-position {
+  text-align: center;
+}
+
+.text-position th {
+  vertical-align: middle !important;
+}

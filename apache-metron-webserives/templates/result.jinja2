@@ -1,0 +1,10 @@
+{% extends "base.jinja2" %} {% block content %}
+<div class="container">
+  <div class="goback">
+    <a href="/metronapi" class="badge badge-primary">Go back</a>
+  </div>
+  <h1>Query Result</h1>
+  <h3>Your query results display as below:</h3>
+  <pre class="metron-config"><code>{{result}}</code></pre>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.jinja2" %}
+{% block content %}
+  <a href="/metronapi" class="badge badge-primary">Go back</a>
+  <h1>Log Query Results</h1>
+  {% if logs_alert|length == 0 %}
+  <p>Not found any alert log with this index name or this timestamp</p>
+  {% else %}
+  <p>Your query results are displayed as below:</p>
+  <div>
+    <table class="table">
+        <thead class="thead-dark text-position">
+          <tr>
+            <th scope="col">Type Log</th>
+            <th scope="col">Start Timestamp</th>
+            <th scope="col">End Timestamp</th>
+            <th scope="col">Count</th>
+            <th scope="col">Full Log</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for log_alert in logs_alert %}
+          <tr>
+            <th scope="row">{{ log_alert['type_log'] }}</th>
+            <td>{{ log_alert['start_timestamp'] }}</td>
+            <td>{{ log_alert['end_timestamp'] }}</td>
+            <td>{{ log_alert['count'] }}</td>
+            <td>
+              {% for log in log_alert['full_log'] %}
+                <p>{{ log }}</p>
+              {% endfor %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </div>
+  {% endif %}
+{% endblock %}

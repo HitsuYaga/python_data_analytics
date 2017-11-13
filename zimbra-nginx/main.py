@@ -46,9 +46,11 @@ def countConnectionPerUser(data):
   # Add cot ErrorCount tu df3 sang df4
   df4['ErrorCount'] = df3['ErrorCount']
   # Tinh gia tri trung binh va do lech chua cua tong so ket noi
-  mean, std = caculateMeanAndSTD(df4['ConnectCount'])
+  mean1, std1 = caculateMeanAndSTD(df4['ConnectCount'])
+  mean2, std2 = caculateMeanAndSTD(df4['ErrorCount'])
+  noiseLimit = mean1 + std1*2
   # Gia tri nguong cua tong so ket noi
-  noiseLimit = mean + std*2
+  print mean1, std1, mean2, std2
   # Dua vao gia tri nguong tim ra gia tri co the tin tuong va gia tri nhieu cua truong ConnectionCount
   df4['StatusConnectCount'] = df4['ConnectCount'].apply(lambda x: 1 if x >= noiseLimit else 0)
   print df4
@@ -79,6 +81,6 @@ def countConnectionPerIP(data):
   df2 = df1.groupby(['Timestamp', 'LoggedUser', 'ClientIP']).size().reset_index(name="ConnectCount")
 
 df = makeDataFramefromFile('log.csv')
-# countConnectionPerUser(df)
+countConnectionPerUser(df)
 countConnectionPerHour(df)
 

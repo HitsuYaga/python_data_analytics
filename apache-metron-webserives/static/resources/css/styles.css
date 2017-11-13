@@ -1,0 +1,27 @@
+body {
+  overflow-y: scroll;
+}
+
+.whole-page {
+  padding-bottom: 100px;
+}
+
+.form-input {
+  padding-left: 0 !important;
+}
+
+.form-common {
+  padding-left: 0 !important;
+  margin-top: 30px
+}
+
+.logout li {
+  float: right;
+  margin-top: 15px;
+  list-style: none;
+  margin-right: 15px
+}
+
+.metron-config {
+  font-size: 70%;
+}
